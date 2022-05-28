@@ -24,7 +24,7 @@ async function run() {
 
 
     app.get('/', async (req, res) => {
-      const products = "hello form server"
+      const products = "hello form server";
       res.send({ products });
     });
 
