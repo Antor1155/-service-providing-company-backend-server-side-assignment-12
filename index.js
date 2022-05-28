@@ -38,6 +38,19 @@ async function run() {
       res.send(result);
     })
 
+//* api for getting  single proudct
+    app.get('/product/:id', async (req, res) => {
+
+      const id = req.params;
+      console.log(id)
+
+      const query = {_id: ObjectId(id)};
+      const product =await productCollection.findOne(query);
+
+
+      res.send({ product });
+    });
+
      //* api for posting item
      app.post("/addItem", async (req, res) => {
       const product = req.body;
