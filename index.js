@@ -30,19 +30,6 @@ async function run() {
 
 
 
-    ////api for getting all product
-    app.get('/product', async (req, res) => {
-      const query = {};
-      const cursor = productCollection.find(query);
-
-      const products = await cursor.toArray();
-
-      res.send(products);
-    });
-
-
-
-
     ///// api for deleting one item 
     app.delete("/deleteUser/:id", async (req, res) => {
       const id = req.params.id;
@@ -90,13 +77,13 @@ async function run() {
     //* api for getting products
     app.get('/products', async (req, res) => {
       const query = {};
-      const cursor = productCollection.find(query).limit(6);
+      const cursor = productCollection.find(query);
 
       const product = await cursor.toArray();
 
       res.send({ product });
     });
-
+    
 
     //* api for get admin role
     app.get('/userRole', async (req, res) => {
