@@ -49,14 +49,22 @@ async function run() {
       res.send(products);
     });
 
+
     // api for get admin role
-    app.get('/users', async (req, res) => {
-      const query = {};
-      const cursor = userCollection.find(query);
+    app.get('/userRole', async(req, res) => {
+      const email= req.query.email;
+      const query = {email};
+      const cursor =await userCollection.findOne(query);
 
-      const products = await cursor.toArray();
+      if(cursor.role ==='admin'){
+        res.send({role:"admin"})
+      }
+      else{
+        res.send({role:"user"});
+      }
 
-      res.send(products);
+
+      
     });
 
    
