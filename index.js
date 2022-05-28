@@ -51,11 +51,12 @@ async function run() {
       res.send(result);
     })
 
-     ///// api for posting item
+     //* api for posting item
      app.post("/addItem", async (req, res) => {
-      const id = req.params.id;
-      const query = { _id: ObjectId(id) };
-      const result = await userCollection.deleteOne(query);
+      const product = req.body;
+
+      const result = await productCollection.insertOne(product);
+      console.log(result);
       res.send(result);
     })
 
@@ -83,6 +84,17 @@ async function run() {
       const users = await cursor.toArray();
 
       res.send({ users });
+    });
+
+
+    //* api for getting products
+    app.get('/products', async (req, res) => {
+      const query = {};
+      const cursor = productCollection.find(query).limit(6);
+
+      const product = await cursor.toArray();
+
+      res.send({ product });
     });
 
 
