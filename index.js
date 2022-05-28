@@ -49,6 +49,16 @@ async function run() {
       res.send(products);
     });
 
+    // api for get admin role
+    app.get('/users', async (req, res) => {
+      const query = {};
+      const cursor = userCollection.find(query);
+
+      const products = await cursor.toArray();
+
+      res.send(products);
+    });
+
    
 
 
@@ -60,7 +70,7 @@ async function run() {
       res.send(result);
     })
 
-    // api for adding one item
+    //*  api for adding one item
     app.post("/addUser", async (req, res) => {
       const doc = req.body;
       const result = await userCollection.insertOne(doc);
