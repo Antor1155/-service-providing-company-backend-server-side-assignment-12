@@ -22,14 +22,15 @@ async function run() {
     const productCollection = client.db("CompayBase").collection("products");
     const userCollection = client.db("CompayBase").collection("users");
 
-    ////api for getting all product
+  
     app.get('/', async (req, res) => {
-     
-
       const products = "hello form server"
-
       res.send({products});
     });
+
+
+
+    ////api for getting all product
     app.get('/product', async (req, res) => {
       const query = {};
       const cursor = productCollection.find(query);
@@ -39,18 +40,29 @@ async function run() {
       res.send(products);
     });
 
-    //// api for getting all users
-    app.get('/users', async (req, res) => {
-      const query = {};
-      const cursor = userCollection.find(query);
 
-      const products = await cursor.toArray();
+    
 
-      res.send(products);
-    });
+    ///// api for deleting one item 
+    app.delete("/deleteUser/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const result = await userCollection.deleteOne(query);
+      res.send(result);
+    })
+
+        //* api for getting all users
+        app.get('/users', async (req, res) => {
+          const query = {};
+          const cursor = userCollection.find(query);
+    
+          const users = await cursor.toArray();
+    
+          res.send({users});
+        });
 
 
-    // api for get admin role
+    //* api for get admin role
     app.get('/userRole', async(req, res) => {
       const email= req.query.email;
       const query = {email};
@@ -62,21 +74,7 @@ async function run() {
       else{
         res.send({role:"user"});
       }
-
-
-      
     });
-
-   
-
-
-    ///// api for deleting one item 
-    app.delete("/deleteUser/:id", async (req, res) => {
-      const id = req.params.id;
-      const query = { _id: ObjectId(id) };
-      const result = await userCollection.deleteOne(query);
-      res.send(result);
-    })
 
     //*  api for adding one item
     app.post("/addUser", async (req, res) => {
@@ -85,8 +83,6 @@ async function run() {
       console.log(doc);
       res.send(result);
     })
-
-
 
   } finally {
     // Ensures that the client will close when you finish/error
