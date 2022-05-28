@@ -28,8 +28,6 @@ async function run() {
       res.send({ products });
     });
 
-
-
     ///// api for deleting one item 
     app.delete("/deleteUser/:id", async (req, res) => {
       const id = req.params.id;
@@ -42,12 +40,9 @@ async function run() {
     app.get('/product/:id', async (req, res) => {
 
       const id = req.params;
-      console.log(id)
 
       const query = {_id: ObjectId(id)};
       const product =await productCollection.findOne(query);
-
-
       res.send({ product });
     });
 
