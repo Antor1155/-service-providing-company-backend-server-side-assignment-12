@@ -51,17 +51,25 @@ async function run() {
       res.send(result);
     })
 
+     ///// api for posting item
+     app.delete("/deleteUser/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const result = await userCollection.deleteOne(query);
+      res.send(result);
+    })
+
 
     //* api for making admin
     app.put('/makeAdmin', async (req, res) => {
-      const query ={_id:ObjectId(req.body._id)};
+      const query = { _id: ObjectId(req.body._id) };
 
       const updateDocument = {
         $set: {
           role: "admin",
         }
       }
-      const options ={ upsert: true };
+      const options = { upsert: true };
       const result = await userCollection.updateOne(query, updateDocument, options);
       console.log(result);
       res.send(result);
@@ -95,9 +103,16 @@ async function run() {
     //*  api for adding one item
     app.post("/addUser", async (req, res) => {
       const doc = req.body;
-      const result = await userCollection.insertOne(doc);
       console.log(doc);
-      res.send(result);
+      const cursor = await userCollection.findOne(doc);
+      console.log(cursor);
+      if (!cursor) {
+        const result = await userCollection.insertOne(doc);
+        return res.send(result);
+      }
+
+      res.send({result:"not updated"})
+      
     })
 
   } finally {
