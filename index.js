@@ -22,10 +22,10 @@ async function run() {
     const productCollection = client.db("CompayBase").collection("products");
     const userCollection = client.db("CompayBase").collection("users");
 
-  
+
     app.get('/', async (req, res) => {
       const products = "hello form server"
-      res.send({products});
+      res.send({ products });
     });
 
 
@@ -41,7 +41,7 @@ async function run() {
     });
 
 
-    
+
 
     ///// api for deleting one item 
     app.delete("/deleteUser/:id", async (req, res) => {
@@ -51,28 +51,44 @@ async function run() {
       res.send(result);
     })
 
-        //* api for getting all users
-        app.get('/users', async (req, res) => {
-          const query = {};
-          const cursor = userCollection.find(query);
-    
-          const users = await cursor.toArray();
-    
-          res.send({users});
-        });
+
+    //* api for making admin
+    app.put('/makeAdmin', async (req, res) => {
+      const query ={_id:ObjectId(req.body._id)};
+
+      const updateDocument = {
+        $set: {
+          role: "admin",
+        }
+      }
+      const options ={ upsert: true };
+      const result = await userCollection.updateOne(query, updateDocument, options);
+      console.log(result);
+      res.send(result);
+    });
+
+    //* api for getting all users
+    app.get('/users', async (req, res) => {
+      const query = {};
+      const cursor = userCollection.find(query);
+
+      const users = await cursor.toArray();
+
+      res.send({ users });
+    });
 
 
     //* api for get admin role
-    app.get('/userRole', async(req, res) => {
-      const email= req.query.email;
-      const query = {email};
-      const cursor =await userCollection.findOne(query);
+    app.get('/userRole', async (req, res) => {
+      const email = req.query.email;
+      const query = { email };
+      const cursor = await userCollection.findOne(query);
 
-      if(cursor.role ==='admin'){
-        res.send({role:"admin"})
+      if (cursor.role === 'admin') {
+        res.send({ role: "admin" })
       }
-      else{
-        res.send({role:"user"});
+      else {
+        res.send({ role: "user" });
       }
     });
 
@@ -93,5 +109,5 @@ run().catch(console.dir);
 
 
 app.listen(port, () => {
-    console.log("listening to port: ", port);
+  console.log("listening to port: ", port);
 })
